@@ -9,7 +9,7 @@
 
 **Note:** This repository is a personal showcase of the architectural patterns and best practices I implement in my professional automation projects. My primary daily contributions are hosted in private repositories at [@turkayyildizz](https://github.com/turkayyildizz)
 
-A production-grade E2E and API test automation framework built with **TypeScript**, **Playwright**, and **Cucumber (BDD)**. Designed to scale across multiple environments and teams — featuring multi-environment config management, Pino structured logging, Playwright trace + visual regression, Docker containerisation, and full CI/CD via GitHub Actions.
+A production-grade E2E and API test automation framework built with **TypeScript**, **Playwright**, and **Cucumber (BDD)**. Designed to scale across multiple environments and teams — featuring multi-environment config management, Pino structured logging, Playwright traces, Docker containerisation, and full CI/CD via GitHub Actions.
 
 ---
 
@@ -45,7 +45,7 @@ Both layers share the same BDD Gherkin format, typed world, structured logging, 
 | Tool | Version | Purpose |
 |---|---|---|
 | TypeScript | 5.x | Strict type-safe test authoring |
-| Playwright | 1.44 | Browser automation + API request context + visual regression |
+| Playwright | 1.44 | Browser automation + API request context |
 | Cucumber | 10.x | BDD / Gherkin test runner |
 | Pino | 9.x | Structured JSON logging (console + file) |
 | Docker | — | Containerised test execution |
@@ -115,7 +115,7 @@ ts-playwright-personal-framework/
 
 ## Architecture Decisions
 
-**Separated hooks by layer** — `hooks.ts` handles browser lifecycle for UI tests. `api.hooks.ts` handles `APIRequestContext` lifecycle for API tests, using `{ tags: '@api' }` so it only fires for API scenarios. No cross-contamination.
+**Separated hooks by layer** — `hooks.ts` handles browser lifecycle for UI tests, using `{ tags: 'not @api' }` so API scenarios never open a browser context. `api.hooks.ts` handles `APIRequestContext` lifecycle for API tests, using `{ tags: '@api' }` so it only fires for API scenarios. No cross-contamination.
 
 **Single typed world** — `ICustomWorld` holds both UI fields (`browser`, `page`, `loginPage`) and API fields (`apiRequest`, `bookingClient`, `bookingId`, `lastResponse`) in one typed interface. Steps across both layers share state safely.
 
@@ -222,9 +222,6 @@ npm run test:security
 
 # Headed mode — watch the browser
 npm run test:headed
-
-# Update visual regression snapshots
-npm run test:visual:update
 ```
 
 ---

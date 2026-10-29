@@ -28,7 +28,7 @@ AfterAll(async () => {
 
 // ── Per-scenario lifecycle ────────────────────────────────────
 
-Before(async function (this: ICustomWorld) {
+Before({ tags: 'not @api' }, async function (this: ICustomWorld) {
     this.consoleErrors = [];
 
     this.context = await browser.newContext({
@@ -59,7 +59,7 @@ Before(async function (this: ICustomWorld) {
     log.info('Scenario setup complete');
 });
 
-After(async function (this: ICustomWorld, scenario) {
+After({ tags: 'not @api' }, async function (this: ICustomWorld, scenario) {
     const failed = scenario.result?.status === 'FAILED';
 
     if (failed) {

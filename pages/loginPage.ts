@@ -136,22 +136,4 @@ export class LoginPage {
     async expectErrorNotVisible(): Promise<void> {
         await expect(this.errorMessage).not.toBeVisible({ timeout: envConfig.timeouts.assertion });
     }
-
-    // ── Visual regression ────────────────────────────────────
-
-    async expectLoginPageMatchesSnapshot(): Promise<void> {
-        log.debug('Running visual snapshot assertion on login page');
-        await expect(this.page).toHaveScreenshot('login-page.png', {
-            maxDiffPixelRatio: 0.02,
-            fullPage: false,
-        });
-    }
-
-    async expectInventoryMatchesSnapshot(): Promise<void> {
-        log.debug('Running visual snapshot assertion on inventory page');
-        await expect(this.page).toHaveScreenshot('inventory-page.png', {
-            maxDiffPixelRatio: 0.02,
-            fullPage: true,
-        });
-    }
 }

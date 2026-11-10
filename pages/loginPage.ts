@@ -89,13 +89,14 @@ export class LoginPage {
     async expectRedirectedToInventory(): Promise<void> {
         log.debug('Asserting redirect to inventory');
         await expect(this.page).toHaveURL(/inventory\.html/, { timeout: envConfig.timeouts.assertion });
-        await expect(this.appLogo).toBeVisible();
+        // Explicit timeout: performance_glitch_user renders slowly, and the 5s default flaked in CI
+        await expect(this.appLogo).toBeVisible({ timeout: envConfig.timeouts.assertion });
     }
 
     async expectRedirectedToLogin(): Promise<void> {
         log.debug('Asserting redirect to login page');
         await expect(this.page).toHaveURL('/', { timeout: envConfig.timeouts.assertion });
-        await expect(this.loginButton).toBeVisible();
+        await expect(this.loginButton).toBeVisible({ timeout: envConfig.timeouts.assertion });
     }
 
     async expectPageTitle(title: string): Promise<void> {

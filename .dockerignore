@@ -1,0 +1,21 @@
+# Installed inside the image by npm ci; host modules may be built for another OS
+node_modules/
+
+# Generated output
+reports/
+test-results/
+dist/
+
+# Local env files and credentials (pass values with -e instead)
+.env.*
+!.env.example
+
+# Not needed to run the tests
+.git/
+.github/
+.idea/
+.vscode/
+.postman/
+postman/
+AGENTS.md
+.DS_Store

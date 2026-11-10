@@ -11,7 +11,7 @@ let browser: Browser;
 
 // ── Global lifecycle ─────────────────────────────────────────
 
-setDefaultTimeout(30000);
+setDefaultTimeout(envConfig.timeouts.default);
 
 BeforeAll(async () => {
     log.info({ env: process.env.TEST_ENV ?? 'staging' }, 'Launching browser');

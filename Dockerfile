@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/playwright:v1.44.0-jammy
+# Image tag must match the Playwright version in package-lock.json
+FROM mcr.microsoft.com/playwright:v1.59.1-noble
 
 WORKDIR /app
 
@@ -6,8 +7,6 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-
-RUN npx playwright install chromium
 
 ENV TEST_ENV=staging
 ENV HEADLESS=true

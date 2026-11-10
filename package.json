@@ -1,14 +1,13 @@
 {
   "name": "ts-playwright-personal-framework",
   "version": "1.0.0",
-  "description": "Production-grade E2E test automation framework — TypeScript · Playwright · Cucumber BDD · CI/CD",
+  "description": "UI and API test automation framework — TypeScript · Playwright · Cucumber BDD · CI/CD",
   "main": "index.js",
   "scripts": {
     "test":               "cross-env TEST_ENV=staging cucumber-js --config cucumber.config.js",
     "test:dev":           "cross-env TEST_ENV=dev cucumber-js --config cucumber.config.js",
     "test:smoke":         "cross-env TEST_ENV=staging TAGS=@smoke cucumber-js --config cucumber.config.js",
     "test:negative":      "cross-env TEST_ENV=staging TAGS=@negative cucumber-js --config cucumber.config.js",
-    "test:security":      "cross-env TEST_ENV=staging TAGS=@security cucumber-js --config cucumber.config.js",
     "test:headed":        "cross-env HEADLESS=false TEST_ENV=staging cucumber-js --config cucumber.config.js",
     "test:api":           "cross-env TEST_ENV=staging TAGS=@api cucumber-js --config cucumber.config.js",
     "test:ui":            "cross-env TEST_ENV=staging TAGS=@login cucumber-js --config cucumber.config.js"

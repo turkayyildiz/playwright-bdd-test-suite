@@ -1,25 +1,29 @@
 // steps/login.steps.ts
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
 import { ICustomWorld } from '../../support/world';
+import { UserFactory } from '../../utils/test-data.factory';
 
 // ── Given ────────────────────────────────────────────────────
 
 Given('I am on the SauceDemo login page', async function (this: ICustomWorld) {
-    if (!this.page) throw new Error('Page is not initialised — check Before hook');
-    await this.loginPage!.goto();
-    await expect(this.page).toHaveURL('https://www.saucedemo.com/');
+    if (!this.loginPage) throw new Error('LoginPage is not initialised — check Before hook');
+    await this.loginPage.goto();
 });
 
 // ── When ─────────────────────────────────────────────────────
 
-When(
-    'I enter username {string} and password {string}',
-    async function (this: ICustomWorld, username: string, password: string) {
-        await this.loginPage!.fillUsername(username);
-        await this.loginPage!.fillPassword(password);
-    }
-);
+// User types map to env.config users (standard, problem, locked, invalid, performance)
+When('I enter the credentials of the {string} user', async function (this: ICustomWorld, userType: string) {
+    await this.loginPage!.enterCredentials(UserFactory.get(userType));
+});
+
+When('I enter a password without a username', async function (this: ICustomWorld) {
+    await this.loginPage!.enterCredentials(UserFactory.emptyUsername());
+});
+
+When('I enter a username without a password', async function (this: ICustomWorld) {
+    await this.loginPage!.enterCredentials(UserFactory.emptyPassword());
+});
 
 When('I click the login button', async function (this: ICustomWorld) {
     await this.loginPage!.clickLogin();

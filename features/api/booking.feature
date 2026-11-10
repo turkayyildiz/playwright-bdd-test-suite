@@ -16,10 +16,11 @@ Feature: Booking API - Restful Booker
     And the response should contain a list of bookings
 
   @api @smoke
+  # Booking dates are generated relative to today by BookingDatesFactory
   Scenario: Create a new booking successfully
     When I create a booking with the following details:
-      | firstname    | lastname | totalprice | depositpaid | checkin    | checkout   | additionalneeds |
-      | Turkay       | Yildiz   | 250        | true        | 2026-06-01 | 2026-06-07 | Breakfast       |
+      | firstname | lastname | totalprice | depositpaid | additionalneeds |
+      | Turkay    | Yildiz   | 250        | true        | Breakfast       |
     Then the response status should be 200
     And the response should contain the booking id
     And the booking firstname should be "Turkay"
@@ -37,8 +38,8 @@ Feature: Booking API - Restful Booker
   Scenario: Update a booking with valid auth token
     Given a booking exists for "Anna" "Smith"
     When I update the booking with the following details:
-      | firstname | lastname | totalprice | depositpaid | checkin    | checkout   | additionalneeds    |
-      | Anna      | Smith    | 400        | true        | 2026-07-01 | 2026-07-10 | Breakfast & Dinner |
+      | firstname | lastname | totalprice | depositpaid | additionalneeds    |
+      | Anna      | Smith    | 400        | true        | Breakfast & Dinner |
     Then the response status should be 200
     And the booking totalprice should be 400
 
@@ -54,7 +55,7 @@ Feature: Booking API - Restful Booker
     When I get the booking with id 999999
     Then the response status should be 404
 
-  @api @negative
+  @api @positive
   Scenario: Delete a booking with valid auth token
     Given a booking exists for "Delete" "Me"
     When I delete the booking

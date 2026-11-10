@@ -1,6 +1,7 @@
 // api/bookingClient.ts
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { getLogger } from '../utils/logger';
+import { BookingDatesFactory } from '../utils/test-data.factory';
 
 const log = getLogger('BookingClient');
 
@@ -88,7 +89,7 @@ export class BookingClient {
         lastname:     'Test',
         totalprice:   100,
         depositpaid:  false,
-        bookingdates: { checkin: '2026-01-01', checkout: '2026-01-02' },
+        bookingdates: BookingDatesFactory.upcoming(30, 1),
       },
       headers: this.jsonHeaders(),
     });

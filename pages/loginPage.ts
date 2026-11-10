@@ -1,5 +1,5 @@
 // pages/loginPage.ts
-import { Page, Locator, expect, APIRequestContext } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { getLogger } from '../utils/logger';
 import envConfig from '../config/env.config';
 
@@ -10,12 +10,6 @@ const log = getLogger('LoginPage');
 export interface LoginCredentials {
     username: string;
     password: string;
-}
-
-export interface LoginResult {
-    success:  boolean;
-    url:      string;
-    error?:   string;
 }
 
 // ── Page Object ──────────────────────────────────────────────
@@ -69,10 +63,9 @@ export class LoginPage {
         await this.loginButton.click();
     }
 
-    async login(credentials: LoginCredentials): Promise<void> {
+    async enterCredentials(credentials: LoginCredentials): Promise<void> {
         await this.fillUsername(credentials.username);
         await this.fillPassword(credentials.password);
-        await this.clickLogin();
     }
 
     async dismissError(): Promise<void> {
@@ -89,24 +82,6 @@ export class LoginPage {
     async clickLogout(): Promise<void> {
         log.info('Logging out');
         await this.logoutLink.click();
-    }
-
-    // ── API layer: set up auth state without UI ──────────────
-    // Avoids slow UI login for tests that only need an authenticated session
-
-    async loginViaApi(request: APIRequestContext, credentials: LoginCredentials): Promise<string> {
-        log.info('Authenticating via API (bypassing UI)');
-        const response = await request.post(`${envConfig.baseUrl}/api/login`, {
-            data: credentials,
-        });
-        if (!response.ok()) {
-            const body = await response.text();
-            log.error({ status: response.status(), body }, 'API login failed');
-            throw new Error(`API login failed: ${response.status()}`);
-        }
-        const { token } = await response.json() as { token: string };
-        log.info('API login successful');
-        return token;
     }
 
     // ── Assertions ───────────────────────────────────────────

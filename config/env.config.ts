@@ -10,6 +10,7 @@ export interface EnvConfig {
   baseUrl:   string;
   users: {
     standard:    { username: string; password: string };
+    problem:     { username: string; password: string };
     locked:      { username: string; password: string };
     invalid:     { username: string; password: string };
     performance: { username: string; password: string };
@@ -25,6 +26,7 @@ const config: EnvConfig = {
   baseUrl: process.env.BASE_URL ?? 'https://www.saucedemo.com',
   users: {
     standard:    { username: process.env.USER_STANDARD  ?? 'standard_user',          password: process.env.PASSWORD ?? 'secret_sauce' },
+    problem:     { username: process.env.USER_PROBLEM   ?? 'problem_user',            password: process.env.PASSWORD ?? 'secret_sauce' },
     locked:      { username: process.env.USER_LOCKED    ?? 'locked_out_user',         password: process.env.PASSWORD ?? 'secret_sauce' },
     invalid:     { username: process.env.USER_INVALID   ?? 'invalid_user',            password: process.env.PASSWORD_INVALID ?? 'wrong_password' },
     performance: { username: process.env.USER_PERF      ?? 'performance_glitch_user', password: process.env.PASSWORD ?? 'secret_sauce' },

@@ -1,39 +1,26 @@
 // utils/test-data.factory.ts
 import envConfig from '../config/env.config';
+// Type-only import: bookingClient imports this file at runtime
+import type { BookingDates } from '../api/bookingClient';
 
 // ── Strict types — zero `any` ────────────────────────────────
 
-export type UserType = 'standard' | 'locked' | 'invalid' | 'performance';
+export type UserType = keyof typeof envConfig.users;
 
 export interface UserCredentials {
   readonly username: string;
   readonly password: string;
 }
 
-export interface LoginScenarioData {
-  readonly credentials:     UserCredentials;
-  readonly expectedOutcome: 'success' | 'error';
-  readonly expectedMessage?: string;
-}
-
-// ── Factory functions ────────────────────────────────────────
+// ── Users ────────────────────────────────────────────────────
 
 export const UserFactory = {
-  get(type: UserType): UserCredentials {
-    return envConfig.users[type];
-  },
-
-  standard():    UserCredentials { return envConfig.users.standard; },
-  locked():      UserCredentials { return envConfig.users.locked; },
-  invalid():     UserCredentials { return envConfig.users.invalid; },
-  performance(): UserCredentials { return envConfig.users.performance; },
-
-  withCredentials(username: string, password: string): UserCredentials {
-    return { username, password };
-  },
-
-  empty(): UserCredentials {
-    return { username: '', password: '' };
+  get(type: string): UserCredentials {
+    if (!Object.prototype.hasOwnProperty.call(envConfig.users, type)) {
+      const known = Object.keys(envConfig.users).join(', ');
+      throw new Error(`Unknown user type "${type}". Known types: ${known}`);
+    }
+    return envConfig.users[type as UserType];
   },
 
   emptyUsername(): UserCredentials {
@@ -45,31 +32,17 @@ export const UserFactory = {
   },
 };
 
-// ── Scenario data sets ───────────────────────────────────────
+// ── Bookings ─────────────────────────────────────────────────
 
-export const LoginScenarios: Record<string, LoginScenarioData> = {
-  validLogin: {
-    credentials:     UserFactory.standard(),
-    expectedOutcome: 'success',
-  },
-  lockedUser: {
-    credentials:     UserFactory.locked(),
-    expectedOutcome: 'error',
-    expectedMessage: 'Sorry, this user has been locked out',
-  },
-  invalidCredentials: {
-    credentials:     UserFactory.invalid(),
-    expectedOutcome: 'error',
-    expectedMessage: 'Username and password do not match any user in this service',
-  },
-  emptyUsername: {
-    credentials:     UserFactory.emptyUsername(),
-    expectedOutcome: 'error',
-    expectedMessage: 'Username is required',
-  },
-  emptyPassword: {
-    credentials:     UserFactory.emptyPassword(),
-    expectedOutcome: 'error',
-    expectedMessage: 'Password is required',
+const isoDate = (daysFromToday: number): string => {
+  const date = new Date();
+  date.setUTCDate(date.getUTCDate() + daysFromToday);
+  return date.toISOString().slice(0, 10);
+};
+
+// Relative to today so test data never drifts into the past
+export const BookingDatesFactory = {
+  upcoming(startInDays = 30, nights = 6): BookingDates {
+    return { checkin: isoDate(startInDays), checkout: isoDate(startInDays + nights) };
   },
 };

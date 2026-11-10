@@ -4,10 +4,11 @@ import { request } from '@playwright/test';
 import { ICustomWorld } from '../support/world';
 import { BookingClient } from '../api/bookingClient';
 import { getLogger } from '../utils/logger';
+import envConfig from '../config/env.config';
 
 const log = getLogger('ApiHooks');
 
-setDefaultTimeout(30000);
+setDefaultTimeout(envConfig.timeouts.default);
 
 Before({ tags: '@api' }, async function (this: ICustomWorld) {
   log.info('Setting up API request context');

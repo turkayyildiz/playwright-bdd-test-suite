@@ -1,13 +1,12 @@
 // support/world.ts
 import { setWorldConstructor, World, IWorldOptions } from '@cucumber/cucumber';
-import { Browser, BrowserContext, Page } from 'playwright';
+import { BrowserContext, Page } from 'playwright';
 import { APIRequestContext, APIResponse } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { BookingClient } from '../api/bookingClient';
 
 export interface ICustomWorld extends World {
     // UI
-    browser:       Browser           | undefined;
     context:       BrowserContext    | undefined;
     page:          Page              | undefined;
     loginPage:     LoginPage         | undefined;
@@ -21,7 +20,6 @@ export interface ICustomWorld extends World {
 
 export class CustomWorld extends World implements ICustomWorld {
     // UI
-    browser:       Browser           | undefined = undefined;
     context:       BrowserContext    | undefined = undefined;
     page:          Page              | undefined = undefined;
     loginPage:     LoginPage         | undefined = undefined;

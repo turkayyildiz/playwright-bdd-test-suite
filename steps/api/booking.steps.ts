@@ -4,6 +4,7 @@ import { expect }                       from '@playwright/test';
 import { ICustomWorld }                 from '../../support/world';
 import { Booking }                      from '../../api/bookingClient';
 import { getLogger }                    from '../../utils/logger';
+import { BookingDatesFactory }          from '../../utils/test-data.factory';
 
 const log = getLogger('BookingSteps');
 
@@ -24,7 +25,7 @@ Given('a booking exists for {string} {string}', async function (
     lastname,
     totalprice:   150,
     depositpaid:  true,
-    bookingdates: { checkin: '2026-06-01', checkout: '2026-06-07' },
+    bookingdates: BookingDatesFactory.upcoming(),
     additionalneeds: 'None',
   });
   expect(response.status()).toBe(200);
@@ -49,7 +50,7 @@ When('I create a booking with the following details:', async function (
     lastname:        row.lastname,
     totalprice:      parseInt(row.totalprice),
     depositpaid:     row.depositpaid === 'true',
-    bookingdates:    { checkin: row.checkin, checkout: row.checkout },
+    bookingdates:    BookingDatesFactory.upcoming(),
     additionalneeds: row.additionalneeds,
   };
   this.lastResponse = await this.bookingClient!.createBooking(booking);
@@ -80,7 +81,7 @@ When('I update the booking with the following details:', async function (
     lastname:        row.lastname,
     totalprice:      parseInt(row.totalprice),
     depositpaid:     row.depositpaid === 'true',
-    bookingdates:    { checkin: row.checkin, checkout: row.checkout },
+    bookingdates:    BookingDatesFactory.upcoming(),
     additionalneeds: row.additionalneeds,
   };
   this.lastResponse = await this.bookingClient!.updateBooking(this.bookingId!, booking);
